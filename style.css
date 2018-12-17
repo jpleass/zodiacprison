@@ -1,0 +1,121 @@
+body {
+  padding: 0;
+  margin: 0;
+  background: blue;
+  font-family: sans-serif; }
+
+#text {
+  color: white;
+  text-align: center; }
+
+#textWrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none; }
+
+#text {
+  position: absolute;
+  font-size: 4vw; }
+
+p {
+  padding-bottom: 0.25em;
+  margin-bottom: 0em;
+  margin-top: 0em; }
+
+#svgWrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center; }
+
+#svg {
+  width: 100%;
+  max-height: 100%;
+  padding: 1em; }
+
+svg {
+  max-height: 90vh;
+  max-width: 100%; }
+
+svg g path {
+  fill: red; }
+
+svg g.active path {
+  cursor: pointer;
+  fill: white !important; }
+
+svg g:hover path {
+  cursor: pointer;
+  fill: white; }
+
+#sliderWrapper {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center; }
+
+#slider {
+  /*
+    position: relative is needed for the handle to be
+    positioned correctly, and border-radius: 100% just
+    makes the div round.
+  */
+  position: relative;
+  border-radius: 100%;
+  /* Other than the above two, go wild! */
+  height: 100%;
+  width: calc(100vh - 4em); }
+  @media screen and (max-width: 576px) {
+    #slider {
+      height: calc(100vw - 2em);
+      width: calc(100vw - 2em); } }
+
+/*
+  Probably best to paste this exactly as is.
+  These CSS rules make sure that the handle rotates
+  properly, so don't change anything here.
+*/
+.cs-handle-container {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 2px;
+  margin-top: -1px; }
+
+/* Also paste as is */
+.cs-handle {
+  position: absolute;
+  transform: translateY(-50%); }
+
+/* the appearance of the handle, feel free to change! */
+#slider .cs-handle {
+  height: 20px;
+  width: 20px;
+  /*
+    Change 'right' to change the offset from the edge.
+    E.g right: 0 puts the handle just next to the edge
+    of #slider, on the inside
+  */
+  right: -10px;
+  cursor: default;
+  border-radius: 100%;
+  background: linear-gradient(180deg, #FFFFFF, #efefef);
+  box-shadow: rgba(0, 0, 0, 0.3) 0 1px 10px 0; }
+
+#slider .cs-handle:active {
+  background: linear-gradient(180deg, #EBEBEB, #DFDFDF); }
