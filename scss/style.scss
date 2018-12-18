@@ -1,13 +1,38 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto+Condensed:300,700|Roboto+Mono');
+@import url('https://fonts.googleapis.com/css?family=Forum');
 body {
 	padding:0;
 	margin:0;
-	background: blue;
-	font-family: sans-serif;
+	background: black;
+  color: white;
+  font-family: 'Roboto Mono', monospace;
+  // font-weight: 700;
+}
+
+#tempSliderWrapper {
+  position: fixed;
+  top:0;
+  left:0;
+  padding: 0.5em;
+  z-index: 99999;
 }
 
 #text {
     color: white;
     text-align: center;
+    text-transform: uppercase;
+    padding: 1em;
+}
+
+.subtitle {
+  padding: 0em 0.75em;
+  font-size: 0.7rem;
+  position: absolute;
+  width: 100%;
+  left: 0;
+  font-family: 'Roboto Mono', monospace;
+  transform: translateY(-0.5em);
+  letter-spacing: 1.5em;
 }
 
 #textWrapper {
@@ -21,15 +46,35 @@ body {
     pointer-events: none;
 }
 
+#tatooLocation {
+  padding-bottom: 1rem;
+}
+
 #text {
 	position: absolute;
-	font-size: 4vw;
+	font-size: 1.6em;
+  max-width: 70vh;
+  line-height: 1;
+  &.larger {
+    font-family: 'Forum', cursive;
+    font-size: 5em;
+    padding-bottom: 7.8rem;
+    letter-spacing: 0.01em;
+    text-shadow: 0 0 0.25em rgba(255,255,255,0.5);
+    .starsign {
+      font-family: 'Roboto Mono', monospace;
+      line-height: 3;
+      font-size: 1rem;
+    }
+  }
 }
 
 p {
-  padding-bottom: 0.25em;
+  padding-bottom: 0.25rem;
+  // padding-top: 0.25rem;
   margin-bottom: 0em;
   margin-top: 0em;
+  line-height: 1;
 }
 
 #svgWrapper {
@@ -41,6 +86,23 @@ p {
     display: flex;
     justify-content: center;
     align-items: center;
+    transition: transform 0.5s ease-in-out, filter 0.15s ease-in-out;
+    &.zoom { 
+      cursor:pointer;
+      transform: scale(2.5) rotate(360deg);
+    }
+    &.back-state {
+      svg path {
+        transition: fill 0.25s;
+      }
+      &:hover {
+        svg g {
+          path {
+            fill: white!important;
+          }
+        }
+      }
+    }
 }
 
 #svg {
@@ -55,19 +117,18 @@ svg {
 }
 
  svg g path {
-    fill: red
+    fill: rgb(0,255,0)!important;
  }
 
 
 svg g.active path {
-	cursor: pointer;
-    fill: white!important;
+  fill: white!important;
 }
 
- svg g:hover path {
-    cursor: pointer;
-    fill: white
- }
+ // svg g:hover path {
+ //    cursor: pointer;
+ //    fill: white
+ // }
 
 #sliderWrapper {
 	width: 100%;
@@ -77,6 +138,16 @@ svg g.active path {
 	display: flex;
 	align-items: center;
 	justify-content: center;
+  &.inactive {
+    pointer-events: none;
+    #text {
+      pointer-events: auto!important;
+    }
+    #slider {
+      transition: opacity 0s ease-in-out;
+      opacity: 0!important;
+    }
+  }
 }
 
 #slider {
@@ -85,6 +156,7 @@ svg g.active path {
     positioned correctly, and border-radius: 100% just
     makes the div round.
   */
+  transition: opacity 0.25s ease-in-out;
   position: relative;
   border-radius: 100%;
 
@@ -118,24 +190,32 @@ svg g.active path {
 .cs-handle {
   position: absolute;
   transform: translateY(-50%);
+  cursor: pointer;
 }
  
 /* the appearance of the handle, feel free to change! */
 #slider .cs-handle {
-  height: 20px;
-  width: 20px;
+  height: 40px;
+  width: 40px;
   /*
     Change 'right' to change the offset from the edge.
     E.g right: 0 puts the handle just next to the edge
     of #slider, on the inside
   */
-  right: -10px;
-  cursor: default;
+  right: -15px;
+  cursor: move; /* fallback if grab cursor is unsupported */
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
   border-radius: 100%;
+  border: solid 0.35vw black;
   background: linear-gradient(180deg, #FFFFFF, #efefef);
   box-shadow: rgba(0, 0, 0, 0.3) 0 1px 10px 0;
 }
  
 #slider .cs-handle:active {
+  cursor: grabbing;
+  cursor: -moz-grabbing;
+  cursor: -webkit-grabbing;
   background: linear-gradient(180deg, #EBEBEB, #DFDFDF)
 }

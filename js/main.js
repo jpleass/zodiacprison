@@ -17,10 +17,21 @@ let tempSlider;
 let button;
 let runningInference = false;
 
+let generationCount = 1;
+
 
 function setupml5() {
   // Create the LSTM Generator passing it the model directory
-  charRNN = ml5.charRNN('./models/prison2/', modelReady);
+  charRNN = ml5.charRNN('./models/prison3/', modelReady);
+
+  $('#tempSlider').on('change', function(event) {
+    console.log('Hey');
+    showVal($(this).val());
+  });
+
+  function showVal(newVal){
+    document.getElementById("temperature").innerHTML=newVal;
+  }
 }
 
 
@@ -30,13 +41,14 @@ function modelReady() {
 
 // Generate new text
 function generateTatoo(starsign) {
+
   // prevent starting inference if we've already started another instance
   // TODO: is there better JS way of doing this?
  if(!runningInference) {
     runningInference = true;
 
     // Update the status log
-    $('#text').text('Generating...');
+    $('#text').removeClass('larger').text('Generating...');
 
     // Grab the original text
     let original = '@'+ starsign + '=';
@@ -51,33 +63,62 @@ function generateTatoo(starsign) {
       // TODO: What are the defaults?
       let data = {
         seed: txt,
-        temperature: 0.5,
+        temperature: $('#tempSlider').val(),
         length: 50
       };
 
 
       // Generate text with the charRNN
+      console.log(data.temperature);
       charRNN.generate(data, gotData);
 
       // When it's done
       function gotData(err, result) {
+        
         // Update the status log
         var parseText = result.sample.split('<')[0];
         var starSign = txt.split('=')[0];
             starSign = starSign.substring(1);
         var location = parseText.split('>')[0];
         var tattoo = parseText.split('>')[1];
-            // console.log(parseText);
-            console.log(starSign);
-            console.log(location);
-            console.log(tattoo);
-            console.log(result.sample);
-            // console.log(result.sample);
-        $('#text').html(
-          `<p>${starSign}</p>
-           <p>${location}</p>
-           <p>${tattoo}</p>`
-          );
+            
+            if (tattoo && location) {
+              generationCount = 1;
+              $('#sliderWrapper').addClass('inactive');
+              $('#svgWrapper').addClass('zoom');
+              $('#text').hide(0);
+              console.log('Everything is here.');
+              $('#text').addClass('larger').html(
+              `<p><span class="starsign">${starSign}</span></p>
+               <p><span class="subtitle">location</span></p>
+               <p id="tatooLocation">${location}</p>
+               <p><span class="subtitle">Description</span></p>
+               <p>${tattoo}</p>`
+              ).delay(500).fadeIn(500, function(){
+                $('#svgWrapper').addClass('back-state');
+                $('#svgWrapper').one('click', function(){ 
+                  $('#text').fadeOut(250, function(){
+                    $(this).removeClass('larger');
+                    $('#text').text(starsign).fadeIn(250);
+                   $('#sliderWrapper').removeClass('inactive');
+                  });
+                   $('#svgWrapper').removeClass('zoom back-state');
+                });
+              });
+            } else {
+              var period = '.';
+              console.log('Stuff Missing');
+
+              $('#text').html('Generating' + period.repeat(generationCount));
+              generationCount++;
+              if (generationCount > 3) {
+                generationCount = 1;
+              }
+              runningInference = false;
+              charRNN.generate(data, gotData);
+            }
+
+        
         // console.log(txt, result, result.sample);
         runningInference = false;
       }
@@ -102,6 +143,7 @@ function circleSlider(){
     var starsign = $svg.attr('id');
     generateTatoo(starsign);
   })
+
 
 }
 
