@@ -42,6 +42,7 @@ function generateTatoo(starsign) {
     let original = '@'+ starsign + '=';
     // Make it to lower case
     let txt = original.toUpperCase();
+    console.log(txt);
 
     // Check if there's something to send
     if (txt.length > 0) {
@@ -74,8 +75,8 @@ function generateTatoo(starsign) {
             // console.log(result.sample);
         $('#text').html(
           `<p>${starSign}</p>
-          <p>${location}</p>
-          <p>${tattoo}</p>`
+           <p>${location}</p>
+           <p>${tattoo}</p>`
           );
         // console.log(txt, result, result.sample);
         runningInference = false;
